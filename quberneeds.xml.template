@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<interface xmlns="http://zero-install.sourceforge.net/2004/injector/interface">
+  <name>Quberneeds</name>
+  <summary>runs helmfiles embedded in Helm charts</summary>
+  <description>A small Python script that fetches and extracts Helm charts and runs helmfiles embedded inside them.</description>
+  <homepage>https://github.com/AXOOM/Quberneeds</homepage>
+  <needs-terminal/>
+
+  <feed-for interface="http://assets.axoom.cloud/tools/quberneeds.xml"/>
+
+  <group license="MIT License">
+    <group>
+      <command name="run" path="quberneeds.py">
+        <runner interface="http://repo.roscidus.com/python/python"/>
+      </command>
+      <requires interface="http://repo.roscidus.com/kubernetes/helmfile">
+        <executable-in-path name="helmfile"/>
+      </requires>
+      <implementation version="{version}" local-path="src">
+        <manifest-digest/>
+        <archive href="quberneeds-{version}.tgz"/>
+      </implementation>
+    </group>
+  </group>
+</interface>
