@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-import os
 import sys
-import tempfile
-import shutil
 import subprocess
 import json
+from os import environ
+from os.path import join
+from tempfile import mkdtemp
+from shutil import rmtree
 
 def main():
     def die():
@@ -44,7 +45,7 @@ def main():
             deploy_charts(paths)
 
     for path in paths:
-        shutil.rmtree(path)
+        rmtree(path)
 
 
 def parse_doc(file_path):
@@ -53,6 +54,7 @@ def parse_doc(file_path):
 
         # Support both a single env block and envs array
         return doc['charts'], doc['envs'] if 'envs' in doc else [doc['env']]
+
 
 def update_repos():
     run_process(['helm', 'repo', 'update'])
@@ -68,7 +70,7 @@ def fetch_charts(charts):
 
 
 def fetch_chart(name, version):
-    path = tempfile.mkdtemp()
+    path = mkdtemp()
 
     args = ['helm', 'fetch', name, '--untar', '--untardir', path]
     if version:
@@ -77,12 +79,12 @@ def fetch_chart(name, version):
     print("Fetching chart " + name + " " + version)
     run_process(args)
 
-    return os.path.join(path, name.split('/')[1])
+    return join(path, name.split('/')[1])
 
 
 def apply_env(env):
     for key, value in env.items():
-        os.environ[key] = value
+        environ[key] = value
 
 
 def deploy_charts(paths, dry_run=False):
@@ -91,7 +93,7 @@ def deploy_charts(paths, dry_run=False):
 
 
 def deploy_chart(path, dry_run=False):
-    args = ['helmfile', '-f', os.path.join(path, 'helmfile.yaml'), 'charts']
+    args = ['helmfile', '-f', join(path, 'helmfile.yaml'), 'charts']
     if dry_run:
         args += ['--args', '--dry-run']
 
@@ -104,7 +106,7 @@ def delete_charts(paths):
 
 
 def delete_chart(path):
-    run_process(['helmfile', '-f', os.path.join(path, 'helmfile.yaml'), 'delete', '--purge'])
+    run_process(['helmfile', '-f', join(path, 'helmfile.yaml'), 'delete', '--purge'])
 
 
 def delete_namespace(name):
