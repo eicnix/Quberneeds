@@ -3,8 +3,8 @@
 import sys
 import subprocess
 import json
-from os import environ
-from os.path import join
+from os import environ, listdir
+from os.path import join, isdir, isfile, splitext
 from tempfile import mkdtemp
 from shutil import rmtree
 
@@ -27,6 +27,8 @@ def main():
 
     update_repos()
     paths = fetch_charts(charts)
+
+    apply_env(get_exports(paths))
 
     for env in envs:
         apply_env(env)
@@ -80,6 +82,35 @@ def fetch_chart(name, version):
     run_process(args)
 
     return join(path, name.split('/')[1])
+
+
+def get_exports(paths):
+    env = {}
+
+    for path in paths:
+        exports_dir = join(path, 'exports')
+        if isdir(exports_dir):
+            load_exports(exports_dir, env)
+
+    return env
+
+
+def load_exports(exports_dir, env):
+    for file_name in listdir(exports_dir):
+        path = join(exports_dir, file_name)
+        if isfile(path):
+            name = splitext(file_name)[0].upper()
+            load_export(name, path, env)
+
+
+def load_export(name, path, env):
+    with open(path, 'r') as f:
+        data=f.read()
+
+    if name in env:
+        env[name] += "," + data
+    else:
+        env[name] = data
 
 
 def apply_env(env):
