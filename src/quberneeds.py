@@ -8,10 +8,6 @@ from os.path import join, isdir, isfile, splitext
 from tempfile import mkdtemp
 from shutil import rmtree
 
-# Workaround for 0install + gcloud issue
-if 'PYTHONHOME' in environ:
-    del environ['PYTHONHOME']
-
 def main():
     def die():
         print('USAGE: (install|delete) file.json')
