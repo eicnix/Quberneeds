@@ -109,7 +109,7 @@ def load_exports(exports_dir, env):
 
 def load_export(name, path, env):
     with open(path, 'r') as f:
-        data=f.read()
+        data = f.read()
 
     if name in env:
         env[name] += "," + data
