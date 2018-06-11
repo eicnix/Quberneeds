@@ -9,7 +9,8 @@ from tempfile import mkdtemp
 from shutil import rmtree
 
 # Workaround for 0install + gcloud issue
-del environ['PYTHONHOME']
+if 'PYTHONHOME' in environ:
+    del environ['PYTHONHOME']
 
 def main():
     def die():
