@@ -13,6 +13,9 @@
       <command name="run" path="quberneeds.py">
         <runner interface="http://repo.roscidus.com/python/python"/>
       </command>
+      <requires interface="http://repo.roscidus.com/kubernetes/kubectl">
+        <executable-in-path name="kubectl"/>
+      </requires>
       <requires interface="http://repo.roscidus.com/kubernetes/helmfile">
         <executable-in-path name="helmfile"/>
       </requires>
