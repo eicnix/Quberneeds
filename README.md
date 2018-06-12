@@ -53,7 +53,7 @@ Quberneeds takes a command (`install` or `delete`) and the path to a JSON file a
 
 ### Run from Git
 
-Clone this Git repository, ensure that `python`, `helmfile` and `helm` are in your `PATH` and then run:
+Clone this Git repository, ensure that `python`, `kubectl`, `helm` and `helmfile` are in your `PATH` and then run:
 
     cd src
     python quberneeds.py (install|delete) file.json
